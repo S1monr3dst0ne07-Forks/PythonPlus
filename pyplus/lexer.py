@@ -1,117 +1,174 @@
-from pyplus.tokens import Token, TokenType
+from .tokens import Token, TokenType
 
 
 class Lexer:
 
     def __init__(self, source):
         self.source = source
+        self.position = 0
+        self.line = 1
+        self.column = 1
+
 
     def tokenize(self):
 
         tokens = []
 
-        for line_number, line in enumerate(
-            self.source.splitlines(),
-            start=1
-        ):
+        while self.position < len(self.source):
 
-            line = line.strip()
+            char = self.source[self.position]
 
-            if not line:
-                continue
 
-            if line.startswith("#"):
+            # Spaces
+            if char in " \t":
+                self.advance()
                 continue
 
 
-            # Variable assignment
-            if ":=" in line:
-
-                name, value = line.split(":=", 1)
+            # New lines
+            if char == "\n":
 
                 tokens.append(
                     Token(
-                        TokenType.IDENTIFIER,
-                        name.strip(),
-                        line_number,
-                        1
+                        TokenType.NEWLINE,
+                        None,
+                        self.line,
+                        self.column
                     )
                 )
+
+                self.advance()
+                self.line += 1
+                self.column = 1
+                continue
+
+
+            # Numbers
+            if char.isdigit():
+
+                tokens.append(
+                    self.read_number()
+                )
+
+                continue
+
+
+            # Identifiers / keywords
+            if char.isalpha():
+
+                tokens.append(
+                    self.read_identifier()
+                )
+
+                continue
+
+
+            # Assignment :=
+            if char == ":" and self.peek() == "=":
 
                 tokens.append(
                     Token(
                         TokenType.ASSIGN,
                         ":=",
-                        line_number,
-                        len(name)
+                        self.line,
+                        self.column
                     )
                 )
 
-                value = value.strip()
+                self.advance()
+                self.advance()
+                continue
 
-                if value.startswith('"') and value.endswith('"'):
 
-                    tokens.append(
-                        Token(
-                            TokenType.STRING,
-                            value[1:-1],
-                            line_number,
-                            len(name)+3
-                        )
-                    )
-
-                elif value.isdigit():
-
-                    tokens.append(
-                        Token(
-                            TokenType.NUMBER,
-                            int(value),
-                            line_number,
-                            len(name)+3
-                        )
-                    )
-
-            elif line.startswith("print "):
+            # Operators
+            if char == "+":
 
                 tokens.append(
                     Token(
-                        TokenType.PRINT,
-                        "print",
-                        line_number,
-                        1
+                        TokenType.PLUS,
+                        "+",
+                        self.line,
+                        self.column
                     )
                 )
 
-                text = line[6:].strip()
-
-                if text.startswith('"') and text.endswith('"'):
-
-                    tokens.append(
-                        Token(
-                            TokenType.STRING,
-                            text[1:-1],
-                            line_number,
-                            7
-                        )
-                    )
-
-                else:
-
-                    tokens.append(
-                        Token(
-                            TokenType.IDENTIFIER,
-                            text,
-                            line_number,
-                            7
-                        )
-                    )
+                self.advance()
+                continue
 
 
-            tokens.append(
-                Token(TokenType.NEWLINE, None, line_number)
+            self.advance()
+
+
+        tokens.append(
+            Token(TokenType.EOF)
+        )
+
+        return tokens
+
+
+
+    def read_number(self):
+
+        start = self.column
+        number = ""
+
+        while (
+            self.position < len(self.source)
+            and self.source[self.position].isdigit()
+        ):
+
+            number += self.source[self.position]
+            self.advance()
+
+        return Token(
+            TokenType.NUMBER,
+            int(number),
+            self.line,
+            start
+        )
+
+
+    def read_identifier(self):
+
+        start = self.column
+        word = ""
+
+        while (
+            self.position < len(self.source)
+            and self.source[self.position].isalnum()
+        ):
+
+            word += self.source[self.position]
+            self.advance()
+
+
+        if word == "print":
+
+            return Token(
+                TokenType.PRINT,
+                word,
+                self.line,
+                start
             )
 
 
-        tokens.append(Token(TokenType.EOF))
+        return Token(
+            TokenType.IDENTIFIER,
+            word,
+            self.line,
+            start
+        )
 
-        return tokens
+
+    def peek(self):
+
+        if self.position + 1 < len(self.source):
+            return self.source[self.position + 1]
+
+        return ""
+
+
+    def advance(self):
+
+        self.position += 1
+        self.column += 1

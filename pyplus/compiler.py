@@ -1,6 +1,6 @@
 from .lexer import Lexer
 from .tokens import TokenType
-
+from .parser import Parser
 
 class Compiler:
 
@@ -10,6 +10,18 @@ class Compiler:
 
         tokens = lexer.tokenize()
 
+        parser = Parser(tokens)
+
+        from .generator import Generator
+
+        tree = parser.parse()
+
+        generator = Generator()
+
+        python_code = generator.generate(tree)
+
+        return python_code
+    
         for token in tokens:
             print(token)
 

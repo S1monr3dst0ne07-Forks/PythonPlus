@@ -1,2 +1,2 @@
-age = 13
-print(age)
+result = 5 + 10
+print(result)
