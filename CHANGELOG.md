@@ -1,9 +1,16 @@
 # PyPlus Changelog
 
-## 0.2
+## v0.2
 
 Added:
 - Lexer system
 - Token system
 - Variable assignment using :=
 - Print statements
+
+## v0.3 Alpha
+- Added variables
+- Added strings
+- Added arithmetic (+)
+- Added AST parser
+- Added code generator
