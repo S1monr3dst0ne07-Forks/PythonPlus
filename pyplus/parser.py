@@ -1,10 +1,11 @@
 from .tokens import TokenType
 from .ast_nodes import (
     NumberNode,
+    StringNode,
+    VariableNode,
     BinaryOperationNode,
     AssignmentNode,
     PrintNode,
-    VariableNode,
     ProgramNode,
 )
 
@@ -94,6 +95,14 @@ class Parser:
     def parse_primary(self):
 
         token = self.current()
+
+        if token.type == TokenType.STRING:
+
+            self.advance()
+
+            return StringNode(
+                token.value
+            )
 
         if token.type == TokenType.NUMBER:
 

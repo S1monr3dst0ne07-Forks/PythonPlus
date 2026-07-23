@@ -1,2 +1,2 @@
-result = 5 + 10
-print(result)
+name = "Herbie"
+print(name)

@@ -43,6 +43,15 @@ class Lexer:
                 continue
 
 
+            # Strings
+            if char == '"':
+
+                tokens.append(
+                    self.read_string()
+                )
+
+                continue
+            
             # Numbers
             if char.isdigit():
 
@@ -123,6 +132,31 @@ class Lexer:
         return Token(
             TokenType.NUMBER,
             int(number),
+            self.line,
+            start
+        )
+
+    def read_string(self):
+
+        start = self.column
+
+        self.advance()   # Skip opening quote
+
+        text = ""
+
+        while (
+            self.position < len(self.source)
+            and self.source[self.position] != '"'
+        ):
+
+            text += self.source[self.position]
+            self.advance()
+
+        self.advance()   # Skip closing quote
+
+        return Token(
+            TokenType.STRING,
+            text,
             self.line,
             start
         )
