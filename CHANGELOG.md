@@ -21,3 +21,8 @@ Added operators -, *, and /
 ## v0.4
 Added operators ( and ) 
 
+## v0.5 Alpha
+Added:
+- Comma support
+- Multiple arguments support
+
