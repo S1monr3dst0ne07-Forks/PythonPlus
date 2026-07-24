@@ -175,6 +175,20 @@ class Lexer:
                 self.advance()
                 continue
 
+            if char == ",":
+
+                tokens.append(
+                    Token(
+                        TokenType.COMMA,
+                        ",",
+                        self.line,
+                        self.column
+                    )
+                )
+
+                self.advance()
+                continue
+
 
             self.advance()
 
@@ -250,7 +264,7 @@ class Lexer:
         if word == "print":
 
             return Token(
-                TokenType.PRINT,
+                TokenType.IDENTIFIER,
                 word,
                 self.line,
                 start

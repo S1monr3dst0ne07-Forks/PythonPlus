@@ -8,6 +8,7 @@ from .ast_nodes import (
     PrintNode,
     ProgramNode,
     GroupNode,
+    FunctionCallNode,
 )
 
 
@@ -43,7 +44,7 @@ class Parser:
 
             self.advance()
 
-            value = self.parse_expression()
+            value = self.parse_primary()
 
             return PrintNode(value)
 
@@ -64,6 +65,12 @@ class Parser:
                     value
                 )
 
+
+            if self.current().type == TokenType.LPAREN:
+
+                self.position -= 1
+
+                return self.parse_primary()
 
         raise Exception(
             f"Unknown statement: {token}"
@@ -127,6 +134,7 @@ class Parser:
 
         token = self.current()
 
+
         if token.type == TokenType.LPAREN:
 
             self.advance()
@@ -142,26 +150,54 @@ class Parser:
 
             return GroupNode(expression)
 
+
         if token.type == TokenType.STRING:
 
             self.advance()
 
-            return StringNode(
-                token.value
-            )
+            return StringNode(token.value)
+
 
         if token.type == TokenType.NUMBER:
 
             self.advance()
 
-            return NumberNode(
-                token.value
-            )
+            return NumberNode(token.value)
 
 
         if token.type == TokenType.IDENTIFIER:
 
             self.advance()
+
+            if self.current().type == TokenType.LPAREN:
+
+                self.advance()
+
+                arguments = []
+
+                while self.current().type != TokenType.RPAREN:
+
+                    arguments.append(
+                        self.parse_expression()
+                    )
+
+                    if self.current().type == TokenType.COMMA:
+                        self.advance()
+                    else:
+                        break
+
+                if self.current().type != TokenType.RPAREN:
+                    raise Exception(
+                        "Expected ')'"
+                    )
+
+                self.advance()
+
+                return FunctionCallNode(
+                    token.value,
+                    arguments
+                )
+
 
             return VariableNode(
                 token.value

@@ -15,8 +15,10 @@ class TokenType(Enum):
     MINUS = auto()
     STAR = auto()
     SLASH = auto()
+    
     LPAREN = auto()
     RPAREN = auto()
+    COMMA = auto()
 
     NEWLINE = auto()
     EOF = auto()

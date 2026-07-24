@@ -1,2 +1,1 @@
-result = (5 + 10) * 2
-print(result)
+print("Hello", "World")

@@ -15,6 +15,14 @@ class StringNode:
     def __repr__(self):
         return f"String({self.value})"
 
+class FunctionCallNode:
+
+    def __init__(self, name, arguments):
+        self.name = name
+        self.arguments = arguments
+
+    def __repr__(self):
+        return f"Call({self.name}, {self.arguments})"
 
 class VariableNode:
 

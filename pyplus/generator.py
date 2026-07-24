@@ -7,6 +7,7 @@ from .ast_nodes import (
     PrintNode,
     ProgramNode,
     GroupNode,
+    FunctionCallNode,
 )
 
 
@@ -73,6 +74,15 @@ class Generator:
         elif isinstance(node, GroupNode):
 
             return "(" + self.generate(node.expression) + ")"
+
+        elif isinstance(node, FunctionCallNode):
+
+            arguments = ", ".join(
+                self.generate(argument)
+                for argument in node.arguments
+            )
+
+            return f"{node.name}({arguments})"
 
 
         raise Exception(
