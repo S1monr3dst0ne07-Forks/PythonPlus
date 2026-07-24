@@ -22,6 +22,9 @@ print [variable, string, or maths]
 Available maths operators:
 +, -, /, *, (, )
 
+Other syntax:
+Commas
+
 
 ## Join the Discord Server!
 Link: https://discord.gg/6krk9C53R
