@@ -6,6 +6,7 @@ from .ast_nodes import (
     AssignmentNode,
     PrintNode,
     ProgramNode,
+    GroupNode,
 )
 
 
@@ -68,6 +69,10 @@ class Generator:
             return (
                 f"print({value})"
             )
+
+        elif isinstance(node, GroupNode):
+
+            return "(" + self.generate(node.expression) + ")"
 
 
         raise Exception(

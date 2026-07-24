@@ -146,6 +146,35 @@ class Lexer:
                 self.advance()
                 continue
 
+            if char == "(":
+
+                tokens.append(
+                    Token(
+                        TokenType.LPAREN,
+                        "(",
+                        self.line,
+                        self.column
+                    )
+                )
+
+                self.advance()
+                continue
+
+
+            if char == ")":
+
+                tokens.append(
+                    Token(
+                        TokenType.RPAREN,
+                        ")",
+                        self.line,
+                        self.column
+                    )
+                )
+
+                self.advance()
+                continue
+
 
             self.advance()
 

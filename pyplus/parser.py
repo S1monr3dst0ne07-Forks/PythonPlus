@@ -7,6 +7,7 @@ from .ast_nodes import (
     AssignmentNode,
     PrintNode,
     ProgramNode,
+    GroupNode,
 )
 
 
@@ -125,6 +126,21 @@ class Parser:
     def parse_primary(self):
 
         token = self.current()
+
+        if token.type == TokenType.LPAREN:
+
+            self.advance()
+
+            expression = self.parse_expression()
+
+            if self.current().type != TokenType.RPAREN:
+                raise Exception(
+                    "Expected ')'"
+                )
+
+            self.advance()
+
+            return GroupNode(expression)
 
         if token.type == TokenType.STRING:
 

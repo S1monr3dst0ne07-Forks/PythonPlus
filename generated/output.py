@@ -1,4 +1,2 @@
-a = 20 - 5
-b = 20 / 4
-print(a)
-print(b)
+result = (5 + 10) * 2
+print(result)

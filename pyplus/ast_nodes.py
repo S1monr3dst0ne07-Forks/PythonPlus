@@ -39,6 +39,13 @@ class BinaryOperationNode:
             f")"
         )
 
+class GroupNode:
+
+    def __init__(self, expression):
+        self.expression = expression
+
+    def __repr__(self):
+        return f"Group({self.expression})"
 
 class AssignmentNode:
 
