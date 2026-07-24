@@ -1,2 +1,4 @@
-name = "Herbie"
-print(name)
+a = 20 - 5
+b = 20 / 4
+print(a)
+print(b)

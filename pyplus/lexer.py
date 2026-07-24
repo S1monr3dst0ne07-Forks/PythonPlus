@@ -104,6 +104,48 @@ class Lexer:
                 self.advance()
                 continue
 
+            if char == "-":
+
+                tokens.append(
+                    Token(
+                        TokenType.MINUS,
+                        "-",
+                        self.line,
+                        self.column
+                    )
+                )
+
+                self.advance()
+                continue
+
+            if char == "*":
+
+                tokens.append(
+                    Token(
+                        TokenType.STAR,
+                        "*",
+                        self.line,
+                        self.column
+                    )
+                )
+
+                self.advance()
+                continue
+
+            if char == "/":
+
+                tokens.append(
+                    Token(
+                        TokenType.SLASH,
+                        "/",
+                        self.line,
+                        self.column
+                    )
+                )
+
+                self.advance()
+                continue
+
 
             self.advance()
 

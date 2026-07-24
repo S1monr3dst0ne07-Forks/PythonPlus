@@ -10,6 +10,9 @@ class Compiler:
 
         tokens = lexer.tokenize()
 
+        for token in tokens:
+            print(token)
+
         parser = Parser(tokens)
 
         from .generator import Generator

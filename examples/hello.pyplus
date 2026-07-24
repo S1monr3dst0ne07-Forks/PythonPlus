@@ -1,3 +1,5 @@
-name := "Herbie"
+a := 20 - 5
+b := 20 / 4
 
-print name
+print a
+print b

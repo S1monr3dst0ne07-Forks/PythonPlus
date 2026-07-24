@@ -42,7 +42,7 @@ class Parser:
 
             self.advance()
 
-            value = self.parse_primary()
+            value = self.parse_expression()
 
             return PrintNode(value)
 
@@ -71,10 +71,41 @@ class Parser:
 
     def parse_expression(self):
 
+
+        return self.parse_addition()
+
+    def parse_addition(self):
+
+        left = self.parse_multiplication()
+
+        while self.current().type in (
+            TokenType.PLUS,
+            TokenType.MINUS,
+        ):
+
+            operator = self.current()
+
+            self.advance()
+
+            right = self.parse_multiplication()
+
+            left = BinaryOperationNode(
+                left,
+                operator.value,
+                right
+            )
+
+        return left
+
+
+    def parse_multiplication(self):
+
         left = self.parse_primary()
 
-
-        while self.current().type == TokenType.PLUS:
+        while self.current().type in (
+            TokenType.STAR,
+            TokenType.SLASH,
+        ):
 
             operator = self.current()
 
@@ -87,7 +118,6 @@ class Parser:
                 operator.value,
                 right
             )
-
 
         return left
 
