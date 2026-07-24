@@ -1,6 +1,6 @@
 # Python+ README.md
 
-## Syntax for v0.3 Alpha
+## Syntax for v0.3
 
 To declare variables:
 [varname] := [value]
