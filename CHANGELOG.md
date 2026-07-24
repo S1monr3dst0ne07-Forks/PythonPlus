@@ -14,3 +14,7 @@ Added:
 - Added arithmetic (+)
 - Added AST parser
 - Added code generator
+
+## v0.3
+Added operators -, *, and /
+
