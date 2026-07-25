@@ -19,9 +19,9 @@ To declare variables:
 To print a value:
 print [variable, string, or maths]
 
-To use an if statement:
-if [condition]
-    [code to run]
+To use an if statement: \
+if [condition] \
+[indent][code to run] \
 end
 
 Available maths operators:
