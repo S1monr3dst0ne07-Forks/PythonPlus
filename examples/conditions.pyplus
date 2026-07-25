@@ -1,0 +1,14 @@
+if True
+    print("This statement is true.")
+end
+if False
+   print("This statement is false.")
+end
+
+if 5 > 7
+    print("5 is bigger than 7.")
+end
+
+if 5 < 7
+    print("7 is bigger than 5.")
+end

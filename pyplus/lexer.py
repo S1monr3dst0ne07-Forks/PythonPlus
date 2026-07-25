@@ -3,6 +3,15 @@ from .tokens import Token, TokenType
 
 class Lexer:
 
+    KEYWORDS = {
+        "function": TokenType.FUNCTION,
+        "end": TokenType.END,
+        "return": TokenType.RETURN,
+        "if": TokenType.IF,
+        "True": TokenType.TRUE,
+        "False": TokenType.FALSE,
+    }
+
     def __init__(self, source):
         self.source = source
         self.position = 0
@@ -18,12 +27,10 @@ class Lexer:
 
             char = self.source[self.position]
 
-
             # Spaces
             if char in " \t":
                 self.advance()
                 continue
-
 
             # New lines
             if char == "\n":
@@ -42,35 +49,61 @@ class Lexer:
                 self.column = 1
                 continue
 
-
             # Strings
             if char == '"':
 
                 tokens.append(
                     self.read_string()
                 )
-
                 continue
-            
+
             # Numbers
             if char.isdigit():
 
                 tokens.append(
                     self.read_number()
                 )
-
                 continue
 
-
             # Identifiers / keywords
-            if char.isalpha():
+            if char.isalpha() or char == "_":
 
                 tokens.append(
                     self.read_identifier()
                 )
-
                 continue
 
+            # ==
+            if char == "=" and self.peek() == "=":
+
+                tokens.append(
+                    Token(
+                        TokenType.EQUAL,
+                        "==",
+                        self.line,
+                        self.column
+                    )
+                )
+
+                self.advance()
+                self.advance()
+                continue
+
+            # !=
+            if char == "!" and self.peek() == "=":
+
+                tokens.append(
+                    Token(
+                        TokenType.NOT_EQUAL,
+                        "!=",
+                        self.line,
+                        self.column
+                    )
+                )
+
+                self.advance()
+                self.advance()
+                continue
 
             # Assignment :=
             if char == ":" and self.peek() == "=":
@@ -85,6 +118,69 @@ class Lexer:
                 )
 
                 self.advance()
+                self.advance()
+                continue
+
+            # <=
+            if char == "<" and self.peek() == "=":
+
+                tokens.append(
+                    Token(
+                        TokenType.LESS_EQUAL,
+                        "<=",
+                        self.line,
+                        self.column
+                    )
+                )
+
+                self.advance()
+                self.advance()
+                continue
+
+            # >=
+            if char == ">" and self.peek() == "=":
+
+                tokens.append(
+                    Token(
+                        TokenType.GREATER_EQUAL,
+                        ">=",
+                        self.line,
+                        self.column
+                    )
+                )
+
+                self.advance()
+                self.advance()
+                continue
+
+            # <
+            if char == "<":
+                
+                tokens.append(
+                    Token(
+                        TokenType.LESS,
+                        "<",
+                        self.line,
+                        self.column
+                    )
+                )
+
+
+                self.advance()
+                continue
+
+            # >
+            if char == ">":
+
+                tokens.append(
+                    Token(
+                        TokenType.GREATER,
+                        ">",
+                        self.line,
+                        self.column
+                        )
+                    )
+
                 self.advance()
                 continue
 
@@ -146,6 +242,7 @@ class Lexer:
                 self.advance()
                 continue
 
+            # Parentheses
             if char == "(":
 
                 tokens.append(
@@ -159,7 +256,6 @@ class Lexer:
 
                 self.advance()
                 continue
-
 
             if char == ")":
 
@@ -175,6 +271,7 @@ class Lexer:
                 self.advance()
                 continue
 
+            # Comma
             if char == ",":
 
                 tokens.append(
@@ -189,16 +286,15 @@ class Lexer:
                 self.advance()
                 continue
 
-
-            self.advance()
-
+            raise Exception(
+                f"Unexpected character '{char}' at {self.line}:{self.column}"
+            )
 
         tokens.append(
             Token(TokenType.EOF)
         )
 
         return tokens
-
 
 
     def read_number(self):
@@ -220,6 +316,7 @@ class Lexer:
             self.line,
             start
         )
+
 
     def read_string(self):
 
@@ -254,25 +351,22 @@ class Lexer:
 
         while (
             self.position < len(self.source)
-            and self.source[self.position].isalnum()
+            and (
+                self.source[self.position].isalnum()
+                or self.source[self.position] == "_"
+            )
         ):
 
             word += self.source[self.position]
             self.advance()
 
-
-        if word == "print":
-
-            return Token(
-                TokenType.IDENTIFIER,
-                word,
-                self.line,
-                start
-            )
-
+        token_type = self.KEYWORDS.get(
+            word,
+            TokenType.IDENTIFIER
+        )
 
         return Token(
-            TokenType.IDENTIFIER,
+            token_type,
             word,
             self.line,
             start

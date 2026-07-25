@@ -24,6 +24,18 @@ class FunctionCallNode:
     def __repr__(self):
         return f"Call({self.name}, {self.arguments})"
 
+class FunctionDefinitionNode:
+
+    def __init__(self, name, parameters, body):
+        self.name = name
+        self.parameters = parameters
+        self.body = body
+
+    def __repr__(self):
+        return (
+            f"Function({self.name})"
+        )
+
 class VariableNode:
 
     def __init__(self, name):
@@ -67,6 +79,31 @@ class AssignmentNode:
             f"{self.name} = {self.value}"
             f")"
         )
+
+class IfNode:
+
+    def __init__(self, condition, body):
+        self.condition = condition
+        self.body = body
+
+    def __repr__(self):
+        return f"If({self.condition})"
+
+class BooleanNode:
+
+    def __init__(self, value):
+        self.value = value
+
+    def __repr__(self):
+        return f"Boolean({self.value})"
+
+class ReturnNode:
+
+    def __init__(self, value):
+        self.value = value
+
+    def __repr__(self):
+        return f"Return({self.value})"
 
 
 class PrintNode:

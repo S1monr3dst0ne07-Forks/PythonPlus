@@ -5,6 +5,7 @@ class TokenType(Enum):
     PRINT = auto()
 
     IDENTIFIER = auto()
+    IF = auto()
 
     STRING = auto()
     NUMBER = auto()
@@ -15,13 +16,29 @@ class TokenType(Enum):
     MINUS = auto()
     STAR = auto()
     SLASH = auto()
+
+    TRUE = auto()
+    FALSE = auto()
     
     LPAREN = auto()
     RPAREN = auto()
     COMMA = auto()
 
+    FUNCTION = auto()
+    END = auto()
+
     NEWLINE = auto()
+    RETURN = auto()
     EOF = auto()
+
+    EQUAL = auto()          # ==
+    NOT_EQUAL = auto()      # !=
+
+    LESS = auto()           # <
+    LESS_EQUAL = auto()     # <=
+
+    GREATER = auto()        # >
+    GREATER_EQUAL = auto()  # >=
 
 
 class Token:

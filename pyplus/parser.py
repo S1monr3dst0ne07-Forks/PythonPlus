@@ -9,6 +9,10 @@ from .ast_nodes import (
     ProgramNode,
     GroupNode,
     FunctionCallNode,
+    FunctionDefinitionNode,
+    ReturnNode,
+    BooleanNode,
+    IfNode,
 )
 
 
@@ -48,6 +52,120 @@ class Parser:
 
             return PrintNode(value)
 
+        if token.type == TokenType.RETURN:
+
+                self.advance()
+
+                value = self.parse_expression()
+
+                return ReturnNode(value)
+
+        if token.type == TokenType.IF:
+
+            self.advance()
+
+            condition = self.parse_expression()
+
+
+            while self.current().type == TokenType.NEWLINE:
+                self.advance()
+
+
+            body = []
+
+
+            while self.current().type != TokenType.END:
+
+                body.append(
+                    self.parse_statement()
+                )
+
+                while self.current().type == TokenType.NEWLINE:
+                    self.advance()
+
+
+            self.advance()  # consume END
+
+
+            return IfNode(
+                condition,
+                body
+            )
+            
+
+        if token.type == TokenType.FUNCTION:
+
+            self.advance()
+
+            name = self.current().value
+
+            self.advance()
+
+            parameters = []
+
+            if self.current().type != TokenType.LPAREN:
+                raise Exception("Expected '(' after function name")
+
+            self.advance()
+
+            while self.current().type != TokenType.RPAREN:
+
+
+                if self.current().type != TokenType.IDENTIFIER:
+                    raise Exception(
+                        "Expected parameter name"
+                    )
+
+                parameters.append(
+                    self.current().value
+                )
+
+                self.advance()
+
+
+                if self.current().type == TokenType.COMMA:
+
+                    self.advance()
+
+                else:
+
+                    break
+
+
+            if self.current().type != TokenType.RPAREN:
+                raise Exception(
+                    "Expected ')'"
+                )
+
+            self.advance()
+
+
+            # Skip new lines after function header
+            while self.current().type == TokenType.NEWLINE:
+                self.advance()
+
+
+            body = []
+
+            while self.current().type != TokenType.END:
+
+                body.append(
+                    self.parse_statement()
+                )
+
+                while self.current().type == TokenType.NEWLINE:
+                    self.advance()
+
+
+            self.advance()  # consume END
+
+
+            return FunctionDefinitionNode(
+                name,
+                parameters,
+                body
+            )
+
         if token.type == TokenType.IDENTIFIER:
 
             name = token.value
@@ -76,11 +194,98 @@ class Parser:
             f"Unknown statement: {token}"
         )
 
+    def parse_function(self):
+
+        self.advance()   # Skip 'function'
+
+        if self.current().type != TokenType.IDENTIFIER:
+            raise Exception("Expected function name")
+
+        name = self.current().value
+        self.advance()
+
+        if self.current().type != TokenType.LPAREN:
+            raise Exception("Expected '('")
+
+        self.advance()
+
+        parameters = []
+
+        while self.current().type != TokenType.RPAREN:
+
+            if self.current().type != TokenType.IDENTIFIER:
+                raise Exception("Expected parameter")
+
+            parameters.append(
+                self.current().value
+            )
+
+            self.advance()
+
+            if self.current().type == TokenType.COMMA:
+                self.advance()
+            else:
+                break
+
+        if self.current().type != TokenType.RPAREN:
+            raise Exception("Expected ')'")
+
+        self.advance()
+
+        while self.current().type == TokenType.NEWLINE:
+            self.advance()
+
+        body = []
+
+        while self.current().type != TokenType.END:
+
+            if self.current().type == TokenType.NEWLINE:
+                self.advance()
+                continue
+
+            body.append(
+                self.parse_statement()
+            )
+
+        self.advance()   # Skip END
+
+        return FunctionDefinitionNode(
+            name,
+            parameters,
+            body
+        )
+
 
     def parse_expression(self):
 
+        return self.parse_comparison()
 
-        return self.parse_addition()
+    def parse_comparison(self):
+
+        left = self.parse_addition()
+
+        while self.current().type in (
+            TokenType.EQUAL,
+            TokenType.NOT_EQUAL,
+            TokenType.LESS,
+            TokenType.LESS_EQUAL,
+            TokenType.GREATER,
+            TokenType.GREATER_EQUAL,
+        ):
+
+            operator = self.current()
+
+            self.advance()
+
+            right = self.parse_addition()
+
+            left = BinaryOperationNode(
+                left,
+                operator.value,
+                right
+            )
+
+        return left
 
     def parse_addition(self):
 
@@ -163,6 +368,19 @@ class Parser:
             self.advance()
 
             return NumberNode(token.value)
+
+        if token.type == TokenType.TRUE:
+
+            self.advance()
+
+            return BooleanNode(True)
+
+
+        if token.type == TokenType.FALSE:
+
+            self.advance()
+
+            return BooleanNode(False)
 
 
         if token.type == TokenType.IDENTIFIER:

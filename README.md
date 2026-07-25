@@ -11,7 +11,7 @@
 ## For Windows:
 - NOTICE: Windows is not fully supported by Python+. In future releases, we will have instructions for Windows users.
 
-## Syntax for v0.4
+## Syntax for v0.5 Beta
 
 To declare variables:
 [varname] := [value]
@@ -19,11 +19,16 @@ To declare variables:
 To print a value:
 print [variable, string, or maths]
 
+To use an if statement:
+if [condition]
+    [code to run]
+end
+
 Available maths operators:
 +, -, /, *, (, )
 
 Other syntax:
-Commas
+Commas, booleans,
 
 
 ## Join the Discord Server!

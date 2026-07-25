@@ -1,12 +1,19 @@
 # Python+ Changelog
 
-## v0.2
+## v0.5 Beta
+- First public release
+- Supports functions, if statements, and booleans
 
+## v0.5 Alpha
 Added:
-- Lexer system
-- Token system
-- Variable assignment using :=
-- Print statements
+- Comma support
+- Multiple arguments support
+
+## v0.4
+Added operators ( and ) 
+
+## v0.3
+Added operators -, *, and /
 
 ## v0.3 Alpha
 - Added variables
@@ -15,14 +22,10 @@ Added:
 - Added AST parser
 - Added code generator
 
-## v0.3
-Added operators -, *, and /
-
-## v0.4
-Added operators ( and ) 
-
-## v0.5 Alpha
+## v0.2
 Added:
-- Comma support
-- Multiple arguments support
+- Lexer system
+- Token system
+- Variable assignment using :=
+- Print statements
 
