@@ -1,5 +1,6 @@
 from .tokens import Token, TokenType
 from dataclasses import dataclass as dc
+import sys
 
 @dc
 class Lexer:

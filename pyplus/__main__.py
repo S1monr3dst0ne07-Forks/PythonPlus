@@ -1,6 +1,7 @@
 from pyplus.compiler import Compiler
+import sys
 
-with open("examples/hello.pyplus") as f:
+with open(sys.argv[1]) as f:
     source = f.read()
 
 compiler = Compiler()
