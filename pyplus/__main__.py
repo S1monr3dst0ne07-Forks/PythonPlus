@@ -1,6 +1,11 @@
 from pyplus.compiler import Compiler
 import sys
 
+if len(sys.argv) < 2:
+    print("No source path provided.")
+    print("Usage: python3 -m pyplus <source path>")
+    sys.exit(1)
+
 with open(sys.argv[1]) as f:
     source = f.read()
 
