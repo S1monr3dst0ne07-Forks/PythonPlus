@@ -10,8 +10,12 @@ python_code = compiler.compile(source)
 with open("generated/output.py", "w") as f:
     f.write(python_code)
 
+print()
 print("Generated Python:")
-print("----------------")
+print("-----------------")
 print(python_code)
+print()
 
+print("Result:")
+print("-------")
 exec(python_code)
