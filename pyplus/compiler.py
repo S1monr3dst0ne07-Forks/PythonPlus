@@ -13,7 +13,8 @@ class Compiler:
         tree = Parser(tokens).parse()
         python_code = Generator().generate(tree)
 
-        return python_code
+        header = "import sys; sys.setrecursionlimit(10000)\n"
+        return header + python_code
     
 
     def dead():
